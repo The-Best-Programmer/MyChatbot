@@ -38,7 +38,7 @@ This Python script provides a simple command-line interface for interacting with
 1. Run the script:
 
    ```bash
-   python your_script_name.py
+   python MyChatbot.py
    ```
 
 2. If the API key and base URL are valid, you will see a welcome message. You can then start asking questions.
