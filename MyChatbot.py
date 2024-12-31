@@ -1,6 +1,5 @@
 from openai import OpenAI
 
-
 def is_api_key_valid(client):
     try:
         r = client.chat.completions.create(
@@ -50,12 +49,19 @@ while validation:
         print(f'\n<History>\n{history}\n\n')
     else:
         history.append({"role": "user", "content": question})
-
+        print('\n\n<Answer>')
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
             messages=history,
+            model='gpt-4o-mini',
             temperature=0.1,
-            top_p=1
+            stream=True
         )
-        print(f'\n\n<Answer>\n{response.choices[0].message.content}\n\n')
-        history.append({"role": "assistant", "content": response.choices[0].message.content})
+        stream_messages = ""
+        for chunk in response:
+            delta = chunk.choices[0].delta
+            if delta.content:
+                stream_message = delta.content
+                stream_messages += stream_message
+                print(stream_message, end='')
+        print('\n\n')
+        history.append({"role": "assistant", "content": stream_messages})
